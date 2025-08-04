@@ -25,10 +25,10 @@ Este projeto é 100% de código aberto, focado na privacidade do usuário e cons
 
 ## Galeria
 
-**Painel de Controle Intuitivo**
+**Painel de Controle**
 ![Painel de Controle](img/1.png)
 
-**Página de Bloqueio Clara e Direta**
+**Página de Bloqueio**
 ![Página de Bloqueio](img/3.png)
 
 ## Como Funciona (Estrutura Técnica)
