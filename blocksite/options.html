@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerenciar Bloqueios - Site Blocker</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c1e21; }
+    .container { max-width: 800px; margin: 20px auto; background-color: #fff; border: 1px solid #dddfe2; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .tabs { display: flex; border-bottom: 1px solid #dddfe2; }
+    .tab-button { padding: 15px 20px; cursor: pointer; background-color: #f5f6f7; border: none; font-size: 16px; font-weight: bold; color: #606770; }
+    .tab-button.active { color: #1877f2; border-bottom: 3px solid #1877f2; background-color: #fff; }
+    .tab-content { padding: 20px; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+    h1, h2, h3 { color: #1c1e21; }
+    textarea, input[type="text"], select { width: 100%; box-sizing: border-box; padding: 10px; margin: 8px 0; border: 1px solid #dddfe2; border-radius: 6px; font-size: 14px; }
+    button { padding: 10px 16px; margin-top: 10px; background-color: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
+    button:hover { background-color: #166fe5; }
+    .site-entry { border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background-color: #fafafa; }
+    .site-entry strong { font-size: 1.2em; color: #333; }
+    .site-entry .details { font-size: 0.9em; color: #666; margin: 5px 0; }
+    .site-entry button { background-color: #e4e6eb; color:#333; font-size: 12px; padding: 8px 12px; margin-right: 5px; }
+    .site-entry button.delete { background-color: #fa3e3e; color: white; }
+    .site-entry button:hover { opacity: 0.9; }
+    .category-group h3 { border-bottom: 2px solid #1877f2; padding-bottom: 5px; margin-top: 30px; }
+    .view-controls { margin-bottom: 20px; }
+    .view-controls button { background-color: #e4e6eb; color: #333; }
+    .view-controls button.active { background-color: #1877f2; color: white; }
+
+    /* Modal Styles */
+    .modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); z-index: 1000; }
+    .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1001; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+    .modal-header h2 { margin: 0; }
+    .modal-close { font-size: 24px; font-weight: bold; cursor: pointer; border: none; background: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-button active" data-tab="tabInicio">Início</button>
+      <button class="tab-button" data-tab="tabAdicionar">Adicionar Sites</button>
+      <button class="tab-button" data-tab="tabGerenciar">Gerenciar Bloqueios</button>
+    </div>
+
+    <div id="tabInicio" class="tab-content tab-pane active">
+      <h1>Bem-vindo ao Site Blocker!</h1>
+      <p>Esta extensão foi criada para te ajudar a manter o foco, aumentar sua produtividade e construir hábitos digitais mais saudáveis, evitando distrações e sites prejudiciais.</p>
+      
+      <h2>Como Usar</h2>
+      <ul>
+        <li><strong>Adicionar Sites:</strong> Na aba "Adicionar Sites", você pode inserir as URLs que deseja bloquear. É possível adicionar várias de uma vez, separando-as por vírgula (ex: <code>x.com, instagram.com</code>). Organize seus bloqueios por categorias para um controle mais fino.</li>
+        <li><strong>Gerenciar Bloqueios:</strong> Na aba "Gerenciar Bloqueios", você tem uma visão completa de todos os sites bloqueados. Pode organizá-los por categoria ou por data de adição, editar qualquer detalhe (URL, categoria, motivo) ou excluir bloqueios que não são mais necessários.</li>
+        <li><strong>Bloqueio em Ação:</strong> Ao tentar acessar um site bloqueado, você verá uma tela de bloqueio clara e direta, informando por que o acesso foi interrompido, com base na categoria e no motivo que você definiu.</li>
+      </ul>
+
+      <h2>Sobre o Autor</h2>
+      <p>Esta extensão foi desenvolvida por <strong>Etoshy</strong>. Você pode encontrar mais dos meus projetos e entrar em contato através do meu <a href="https://github.com/etoshy" target="_blank">perfil no GitHub</a>.</p>
+    </div>
+
+    <div id="tabAdicionar" class="tab-content tab-pane">
+      <h2>Adicionar Novos Sites para Bloquear</h2>
+      <p>Insira uma ou mais URLs separadas por vírgula. Ex: <strong>x.com, instagram.com, https://www.facebook.com</strong></p>
+      <textarea id="sitesInput" placeholder="Ex: x.com, instagram.com" rows="4"></textarea>
+      
+      <label for="addCategorySelect"><strong>Categoria</strong></label>
+      <select id="addCategorySelect"></select>
+      <input type="text" id="addCustomCategory" placeholder="Digite a nova categoria aqui" style="display:none;">
+      
+      <label for="reasonInput"><strong>Motivo do bloqueio (opcional)</strong></label>
+      <input type="text" id="reasonInput" placeholder="Ex: Perco muito tempo neste site">
+      
+      <button id="addSitesBtn">Adicionar Sites</button>
+    </div>
+
+    <div id="tabGerenciar" class="tab-content tab-pane">
+      <h2>Sites Bloqueados</h2>
+      <button id="openAddModalBtn">Adicionar Novo Site</button>
+      <div class="view-controls">
+        <span>Organizar por:</span>
+        <button id="viewByCategoryBtn" class="active">Categoria</button>
+        <button id="viewByDateBtn">Data de Adição</button>
+      </div>
+      <div id="siteList">Carregando sites...</div>
+    </div>
+  </div>
+
+  <!-- Modal para Adicionar/Editar Site -->
+  <div id="editModal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Editar Site</h2>
+        <button id="modalCloseBtn" class="modal-close">×</button>
+      </div>
+      <label for="modalUrlInput"><strong>URL(s) do Site</strong> (separadas por vírgula se for adicionar vários)</label>
+      <textarea id="modalUrlInput" rows="3"></textarea>
+
+      <label for="modalCategorySelect"><strong>Categoria</strong></label>
+      <select id="modalCategorySelect"></select>
+      <input type="text" id="modalCustomCategory" placeholder="Digite a nova categoria aqui" style="display:none;">
+
+      <label for="modalReasonInput"><strong>Motivo</strong></label>
+      <input type="text" id="modalReasonInput">
+
+      <button id="modalSaveBtn">Salvar Alterações</button>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
