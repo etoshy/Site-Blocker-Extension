@@ -26,7 +26,7 @@ Este projeto é 100% de código aberto, focado na privacidade do usuário e cons
 ## Galeria
 
 **Painel de Controle**
-![Painel de Controle](img/1.png)
+![Painel de Controle](img/2.png)
 
 **Página de Bloqueio**
 ![Página de Bloqueio](img/3.png)
